@@ -8,6 +8,8 @@ import Footer from "../../components/Footer/Footer";
 import {titan} from "../index";
 import {fetchProducts} from "../../utils/fetchProducts";
 import Product from "../../components/Products/Product";
+import {useRouter} from "next/router";
+import ErrorPage from 'next/error'
 
 
 interface Props {
@@ -15,12 +17,15 @@ interface Props {
     products: Product[];
 }
 
-function FurniturePage({ products, category } : Props ) {
+function Furniture({ products, category } : Props ) {
 
+    const router = useRouter();
+    if (!router.isFallback && !category && !products) {
+        return <ErrorPage statusCode={404} />
+    }
 
     return(
     <div>
-
         <Head title={`Sherman Furniture - ${category.title}`} description={category.title}/>
 
         <div>
@@ -35,7 +40,6 @@ function FurniturePage({ products, category } : Props ) {
                     </div>
                 </div>
             </div>
-
 
             <div className=''>
                 <div className="products spacing grid grid-rows-1 gap-x-8 gap-y-12 grid-flow-row md:grid-flow-col">
@@ -83,15 +87,13 @@ export const getStaticPaths : GetStaticPaths = async() => {
 export const getStaticProps: GetStaticProps = async({params}) => {
 
     const query = `*[_type == 'category'  && slug.current == $slug][0]{
-_id,
-  ...,
-    "products": *[_type == 'product' && references(^._id)]
-}`
+        _id,
+          ...,
+        "products": *[_type == 'product' && references(^._id)]
+        }`
     ;
 
     const products = await fetchProducts();
-
-
 
     const category = await sanityClient.fetch(query, {
         slug: params?.slug,
@@ -111,4 +113,4 @@ _id,
     }
 }
 
-export default FurniturePage
+export default Furniture
