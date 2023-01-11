@@ -11,7 +11,7 @@ export interface HeadProps {
 
 export const Head = (props: HeadProps) => {
     const {
-        ogImage = 'https://res.cloudinary.com/dpv0ukspz/image/upload/v1650138958/og-100_mvbgru.jpg',
+        ogImage = 'https://www.svgrepo.com/show/477645/sofa-8.svg',
         title = 'Sherman Furniture & Design',
         description = 'Modern furniture store',
     } = props;
@@ -22,7 +22,7 @@ export const Head = (props: HeadProps) => {
     <meta name="description" content={description} />
     <link
     rel="icon"
-    href="/favicon.ico"
+    href={ogImage}
     />
 
     <meta property="og:type" content="website" />
